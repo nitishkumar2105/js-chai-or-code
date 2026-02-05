@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Proposal</title>
+
+<style>
+body{
+    text-align:center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right,#ffcccc,#ffe6f2);
+    margin-top:120px;
+    overflow:hidden;
+}
+
+h1{
+    font-size:40px;
+    color:#ff0066;
+}
+
+button{
+    padding:12px 25px;
+    font-size:18px;
+    margin:10px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+#yesBtn{
+    background:#ff0066;
+    color:white;
+    font-size:20px;
+}
+
+#noBtn{
+    background:#cccccc;
+    position:fixed;
+}
+
+/* Big Heart */
+#bigHeart{
+    display:none;
+    font-size:160px;
+    animation: heartbeat 1s infinite;
+}
+
+/* Final Message */
+#finalMsg{
+    display:none;
+    font-size:35px;
+    color:#ff0066;
+    font-weight:bold;
+    margin-top:20px;
+}
+
+/* Heart Beat */
+@keyframes heartbeat{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.2); }
+    100%{ transform:scale(1); }
+}
+
+/* Floating Hearts */
+.heart{
+    position:absolute;
+    color:red;
+    font-size:25px;
+    animation: float 4s linear infinite;
+}
+
+@keyframes float{
+    0%{ transform:translateY(0); opacity:1;}
+    100%{ transform:translateY(-500px); opacity:0;}
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Will you be my Valentine? ❤️</h1>
+
+<button id="yesBtn" onclick="yesClicked()">Yes 💖</button>
+<button id="noBtn" onclick="noClicked()">No 😢</button>
+
+<br><br>
+
+<div id="bigHeart">❤️</div>
+<div id="finalMsg">
+Yayyyyy ❤️🥰 You are officially my Valentine 🎉💘
+</div>
+
+<script>
+
+let messages = [
+    "Are you sure? 😟",
+    "Soch lo fir 😢",
+    "Dil toot jayega 💔",
+    "Last chance! 😭",
+    "Please maan jao ❤️"
+];
+
+let index = 0;
+let yesSize = 20;
+let angle = 0;
+
+function moveNoButton(){
+
+    let yesBtn = document.getElementById("yesBtn");
+    let noBtn = document.getElementById("noBtn");
+
+    let rect = yesBtn.getBoundingClientRect();
+    let noRect = noBtn.getBoundingClientRect();
+
+    let centerX = rect.left + rect.width/2;
+    let centerY = rect.top + rect.height/2;
+
+    let radius = Math.max(rect.width, rect.height);
+
+    let x = centerX + radius * Math.cos(angle) - noRect.width/2;
+    let y = centerY + radius * Math.sin(angle) - noRect.height/2;
+
+    x = Math.max(0, Math.min(window.innerWidth - noRect.width, x));
+    y = Math.max(0, Math.min(window.innerHeight - noRect.height, y));
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+window.onload = moveNoButton;
+
+function noClicked(){
+
+    document.getElementById("question").innerHTML = messages[index];
+    index = (index + 1) % messages.length;
+
+    yesSize += 8;
+
+    let yesBtn = document.getElementById("yesBtn");
+    yesBtn.style.fontSize = yesSize + "px";
+    yesBtn.style.padding = (yesSize/2) + "px " + yesSize + "px";
+
+    angle += 0.8;
+    moveNoButton();
+}
+
+function yesClicked(){
+
+    document.getElementById("question").style.display="none";
+    document.getElementById("yesBtn").style.display="none";
+    document.getElementById("noBtn").style.display="none";
+
+    document.getElementById("bigHeart").style.display="block";
+    document.getElementById("finalMsg").style.display="block";
+
+    setInterval(createHeart,300);
+}
+
+function createHeart(){
+
+    let heart = document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(20+Math.random()*30)+"px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },4000);
+}
+
+</script>
+
+</body>
+</html>
